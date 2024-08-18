@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人民币和日元汇率兑换</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e9ecef;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select, button {
+            width: calc(100% - 16px);
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        select {
+            background-color: #f8f9fa;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            padding: 15px;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>人民币和日元汇率兑换</h1>
+        <div class="input-group">
+            <label for="amount">金额：</label>
+            <input type="number" id="amount" placeholder="请输入金额" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="fromCurrency">从：</label>
+            <select id="fromCurrency">
+                <option value="CNY">人民币 (CNY)</option>
+                <option value="JPY">日元 (JPY)</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="toCurrency">到：</label>
+            <select id="toCurrency">
+                <option value="JPY">日元 (JPY)</option>
+                <option value="CNY">人民币 (CNY)</option>
+            </select>
+        </div>
+        <button onclick="convertCurrency()">兑换</button>
+        <div id="result">请进行兑换操作</div>
+    </div>
+
+    <script>
+        const CNY_TO_JPY = 20.41;
+        const JPY_TO_CNY = 1 / CNY_TO_JPY;
+
+        function convertCurrency() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            let result;
+
+            if (isNaN(amount) || amount <= 0) {
+                document.getElementById('result').innerHTML = "请输入有效的金额";
+                return;
+            }
+
+            if (fromCurrency === "CNY" && toCurrency === "JPY") {
+                result = amount * CNY_TO_JPY;
+                document.getElementById('result').innerHTML = `${amount.toFixed(2)} 人民币 = ${result.toFixed(2)} 日元`;
+            } else if (fromCurrency === "JPY" && toCurrency === "CNY") {
+                result = amount * JPY_TO_CNY;
+                document.getElementById('result').innerHTML = `${amount.toFixed(2)} 日元 = ${result.toFixed(2)} 人民币`;
+            } else {
+                document.getElementById('result').innerHTML = "请选择不同的货币进行兑换";
+            }
+        }
+
+        // 自动更新目标货币
+        document.getElementById('fromCurrency').addEventListener('change', function() {
+            const toCurrency = document.getElementById('toCurrency');
+            toCurrency.value = this.value === 'CNY' ? 'JPY' : 'CNY';
+        });
+    </script>
+</body>
+</html>
